@@ -7,18 +7,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2.1.0
-    - uses: actions/setup-node@v1.4.1
     - name: Prepare your file
       run: |
         mkdir Download
         git clone "https://github.com/${GITHUB_REPOSITORY}.wiki.git"
         wiki=`echo $GITHUB_REPOSITORY | cut -d "/" -f 2`.wiki/Home.md
         wget `cat $wiki | xargs` --directory-prefix=Download
-        npm i
-        npm start
+    - name: Uploading
+      run: |
+        chmod -R 777 ./uploader/
+        cat > ./uploader/auth.json <<EOF
+        $token
+        EOF
+        ./uploader/OneDriveUploader -f -c "./uploader/auth.json" -skip -s "Download" -r "English"
       env: 
-        dav_url: ${{ secrets.dav_url }}
-        dav_username: ${{ secrets.dav_username }}
-        dav_password: ${{ secrets.dav_password }}
-      
-        
+        token: ${{ secrets.TOKEN }}     
