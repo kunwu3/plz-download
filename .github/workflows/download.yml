@@ -15,10 +15,18 @@ jobs:
         wget `cat $wiki | xargs` --directory-prefix=Download
     - name: Uploading
       run: |
-        chmod -R 777 ./uploader/
         cat > ./uploader/auth.json <<EOF
-        $token
+        {
+          "RefreshInterval": 1500,
+          "ThreadNum": "2",
+          "BlockSize": "10",
+          "SigleFile": "100",
+          "MainLand": false,
+          "MSAccount": false,
+          "RefreshToken": "$token"
+        }
         EOF
+        chmod -R 777 ./uploader/
         ./uploader/OneDriveUploader -f -c "./uploader/auth.json" -skip -s "Download" -r "English"
       env: 
         token: ${{ secrets.TOKEN }}     
