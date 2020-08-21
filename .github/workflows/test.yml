@@ -23,12 +23,11 @@ jobs:
            "speed-limit-down": 7000,
            "speed-limit-up-enabled": true,
            "speed-limit-up": 10,
-           "download-dir": "~/Download",
            "dht-enabled": false,
            "encryption": 0
         }
         EOF
-        transmission-cli -g ~/uploader "`cat $wiki | xargs`"
+        transmission-cli -g ./uploader -w ./Download "`cat $wiki | xargs`"
       env: 
         token: ${{ secrets.TOKEN }}     
 #        wget `cat $wiki | xargs` --directory-prefix=Download
