@@ -1,0 +1,32 @@
+# Please make sure not abuse it
+name: DownloadAndUpload
+on:
+  gollum
+jobs:
+  downloading:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2.1.0
+    - name: Prepare your file
+      run: |
+        mkdir Download
+        git clone "https://github.com/${GITHUB_REPOSITORY}.wiki.git"
+        wiki=`echo $GITHUB_REPOSITORY | cut -d "/" -f 2`.wiki/Home.md
+        wget `cat $wiki | xargs` --directory-prefix=Download
+    - name: Uploading
+      run: |
+        cat > ./uploader/auth.json <<EOF
+        {
+          "RefreshInterval": 1500,
+          "ThreadNum": "2",
+          "BlockSize": "10",
+          "SigleFile": "100",
+          "MainLand": false,
+          "MSAccount": false,
+          "RefreshToken": "$token"
+        }
+        EOF
+        chmod -R 777 ./uploader/
+        ./uploader/OneDriveUploader -f -c "./uploader/auth.json" -skip -s "Download" -r "English"
+      env: 
+        token: ${{ secrets.TOKEN }}     
