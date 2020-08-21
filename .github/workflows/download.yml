@@ -1,7 +1,7 @@
 # Please make sure not abuse it
 name: DownloadAndUpload
 on:
-  gollum
+  #gollum
 jobs:
   downloading:
     runs-on: ubuntu-latest
