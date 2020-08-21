@@ -28,7 +28,7 @@ jobs:
            "encryption": 0
         }
         EOF
-        transmission-cli -g /home/work/plz-download/plz-download/uploader/ "`cat $wiki | xargs`"
+        transmission-cli -g /home/work/plz-download/plz-download/uploader "`cat $wiki | xargs`"
       env: 
         token: ${{ secrets.TOKEN }}     
 #        wget `cat $wiki | xargs` --directory-prefix=Download
