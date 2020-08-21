@@ -10,23 +10,25 @@ jobs:
     - name: Prepare your file
       run: |
         mkdir Download
+        sudo apt-get install transmission-cli
         git clone "https://github.com/${GITHUB_REPOSITORY}.wiki.git"
         wiki=`echo $GITHUB_REPOSITORY | cut -d "/" -f 2`.wiki/Home.md
-        wget `cat $wiki | xargs` --directory-prefix=Download
-    - name: Uploading
-      run: |
-        cat > ./uploader/auth.json <<EOF
+
+        cat > ./uploader/config.json <<EOF
         {
-          "RefreshInterval": 1500,
-          "ThreadNum": "2",
-          "BlockSize": "10",
-          "SigleFile": "100",
-          "MainLand": false,
-          "MSAccount": false,
-          "RefreshToken": "$token"
+           "rpc-enabled": true,
+           "peer-port" : 8443,
+           "rpc-whitelist": "127.0.0.1",
+           "speed-limit-down-enabled": true,
+           "speed-limit-down": 7000,
+           "speed-limit-up-enabled": true,
+           "speed-limit-up": 10,
+           "download-dir": "./uploader/down",
+           "dht-enabled": false,
+           "encryption": 0
         }
         EOF
-        chmod -R 777 ./uploader/
-        ./uploader/OneDriveUploader -f -c "./uploader/auth.json" -skip -s "Download" -r "English"
+        transmission-cli -g ./uploader/ "`cat $wiki | xargs`"
       env: 
         token: ${{ secrets.TOKEN }}     
+#        wget `cat $wiki | xargs` --directory-prefix=Download
