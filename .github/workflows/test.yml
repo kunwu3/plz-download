@@ -14,21 +14,21 @@ jobs:
         git clone "https://github.com/${GITHUB_REPOSITORY}.wiki.git"
         wiki=`echo $GITHUB_REPOSITORY | cut -d "/" -f 2`.wiki/Home.md
 
-        cat > ./uploader/config.json <<EOF
+        cat > ./uploader/settings.json <<EOF
         {
            "rpc-enabled": true,
-           "peer-port" : 8443,
+           "peer-port" : 64312,
            "rpc-whitelist": "127.0.0.1",
            "speed-limit-down-enabled": true,
            "speed-limit-down": 7000,
            "speed-limit-up-enabled": true,
            "speed-limit-up": 10,
-           "download-dir": "./uploader/down",
+           "download-dir": "/home/work/plz-download/plz-download/Download",
            "dht-enabled": false,
            "encryption": 0
         }
         EOF
-        transmission-cli -g ./uploader/ "`cat $wiki | xargs`"
+        transmission-cli -g /home/work/plz-download/plz-download/uploader/ "`cat $wiki | xargs`"
       env: 
         token: ${{ secrets.TOKEN }}     
 #        wget `cat $wiki | xargs` --directory-prefix=Download
