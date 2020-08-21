@@ -2,7 +2,6 @@
 name: DownloadAndUpload
 on:
   gollum
-  push
 jobs:
   downloading:
     runs-on: ubuntu-latest
